@@ -48,9 +48,13 @@ h1 { font-size: 28px; margin: 0; font-weight: 600; }
 .pill { font-size: 12px; border: 1px solid #888; padding: 2px 8px; border-radius: 99px; background: #f4f4f4; }
 .sub { font-size: 13px; color: #666; }
 .price { text-align: right; white-space: nowrap; }
-.price b { font-size: 17px; }
+.price b { font-size: 20px; }
 .price small { color: #666; }
 .price s { display: block; color: #777; font-size: 13px; }
+.price .per { display: block; font-size: 12px; color: #666; }
+.off { display: inline-block; margin-top: 3px; font-size: 12px; font-weight: 700; border: 1px solid #222; padding: 0 6px; }
+.subnote { font-size: 13px; color: #444; text-align: center; margin-top: -4px; }
+.tag { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; border: 1px solid #888; padding: 1px 6px; color: #444; }
 .label { position: absolute; top: -10px; right: 14px; background: #fff; border: 1px solid #222; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 2px 8px; }
 
 .inner { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px dashed #bbb; gap: 10px; }
@@ -131,7 +135,8 @@ h1 { font-size: 28px; margin: 0; font-weight: 600; }
       </div>
       <div class="lines"><span></span><span></span></div>
 
-      <div class="sec">Choose your sets</div>
+      <div class="sec">Subscribe &amp; save</div>
+      <p class="subnote">Choose how many sets arrive in each delivery. Skip, pause or cancel anytime.</p>
       <div class="tiers" id="tiers" role="radiogroup" aria-label="Sets per delivery"></div>
 
       <div class="designs">
@@ -139,23 +144,23 @@ h1 { font-size: 28px; margin: 0; font-weight: 600; }
         <button class="link" type="button" id="openMix">Mix in other designs</button>
       </div>
 
-      <button class="cta" type="button" id="cta">Subscribe • $55</button>
+      <button class="cta" type="button" id="cta">Start subscription • $60</button>
       <ul class="after" id="after"></ul>
-      <button class="once" type="button" id="once">Buy once – no savings • $84</button>
+      <button class="once" type="button" id="once">Buy once – no savings • $140</button>
     </div>
   </div>
 
   <section class="notes">
     <h2>How this works</h2>
     <ol>
-      <li>The customer picks a tier: 5, 7 or 10 sets per delivery. 7 is selected by default.</li>
-      <li>Each tier has its own recommended delivery timing: 5 sets every 4 weeks, 7 every 6 weeks, 10 every 8 weeks. The customer can change it inside the selected tier.</li>
-      <li>Bigger tiers cost less per set: $8.00, $7.86, $7.50. "Just $x/day" updates with the timing.</li>
+      <li>The customer picks a subscription: 5, 7 or 10 sets per delivery ($40 / $60 / $80). 7 is recommended and selected by default.</li>
+      <li>Each box shows the subscription price, the one-time price for the same sets crossed out, and the % saved.</li>
+      <li>Inside the selected box the customer picks how often it arrives: every 4, 6 or 8 weeks. Each size remembers its own choice.</li>
       <li>All sets are the product the customer is on. "Mix in other designs" lets them swap some for other designs, same number of sets, same price.</li>
       <li>Before every delivery the customer can swap designs, skip, pause or cancel.</li>
       <li>"Buy once" is a one-time purchase of the same number of sets at full price, no subscription.</li>
     </ol>
-    <p class="ph">Placeholder: the one-time price per set ($12). It drives the crossed-out prices, "Save $X" and the buy-once total. Design names in the mix-in panel are placeholders.</p>
+    <p class="ph">One-time price is $20 per set (from the sketch: $100 for 5 sets). It drives the crossed-out prices, the % saved and the buy-once total. Design names in the mix-in panel are placeholders.</p>
   </section>
 </main>
 
@@ -169,11 +174,11 @@ h1 { font-size: 28px; margin: 0; font-weight: 600; }
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
-const ONE_SET = 12;   /* placeholder one-time price per set */
+const ONE_SET = 20;   /* one-time price per set */
 const TIERS = [
-  { n: 5,  price: 40, suggest: 4 },
-  { n: 7,  price: 55, suggest: 6, label: "Our pick" },
-  { n: 10, price: 75, suggest: 8, label: "Best deal" },
+  { n: 5,  price: 40 },
+  { n: 7,  price: 60, label: "Recommended" },
+  { n: 10, price: 80 },
 ];
 const FREQS = [4, 6, 8];
 const THIS = "this";
@@ -207,15 +212,15 @@ function render() {
         <span class="radio"></span>
         <div class="box thumb">img</div>
         <div>
-          <div class="title"><b>${x.n} Sets</b><span class="pill">Just ${usd(x.price / (fr * 7))}/day</span></div>
-          <div class="sub">Every ${fr} weeks${fr === x.suggest ? " (recommended)" : ""}</div>
+          <div class="title"><b>${x.n} Sets</b><span class="tag">Subscription</span></div>
+          <div class="sub">Delivered every ${fr} weeks</div>
         </div>
-        <div class="price"><b>${usd(x.price / x.n)}</b><small>/set</small><s>${usd(ONE_SET)}</s></div>
+        <div class="price"><b>${usd0(x.price)}</b><span class="per">per delivery</span><s>${usd0(ONE_SET * x.n)} one-time</s><span class="off">-${Math.round((1 - x.price / (ONE_SET * x.n)) * 100)}%</span></div>
       </div>
       <div class="inner">
         <div class="lbl">Delivered every</div>
-        <div class="freqs" role="radiogroup" aria-label="Delivery frequency">${FREQS.map(v => `<button type="button" role="radio" aria-checked="${v === fr}" data-f="${v}">${v} weeks<small>new set every ~${Math.round(v * 7 / x.n)} days</small>${v === x.suggest ? "<em>Recommended</em>" : ""}</button>`).join("")}</div>
-        <ul class="checks"><li>Save ${usd(ONE_SET * x.n - x.price)} on every delivery</li><li>Swap designs before each delivery</li></ul>
+        <div class="freqs" role="radiogroup" aria-label="Delivery frequency">${FREQS.map(v => `<button type="button" role="radio" aria-checked="${v === fr}" data-f="${v}">${v} weeks</button>`).join("")}</div>
+        <ul class="checks"><li>Swap designs before each delivery</li></ul>
       </div>
     </div>`;
   }).join("");
@@ -228,8 +233,8 @@ function render() {
 
   $("#designsText").textContent = mixed() ? Object.entries(S.picks).map(([id, q]) => `${q} × ${byId[id].name}`).join(", ") : `${S.n} × Almandine`;
   $("#openMix").textContent = mixed() ? "Change designs" : "Mix in other designs";
-  $("#cta").textContent = `Subscribe • ${usd0(tier().price)}`;
-  $("#after").innerHTML = `<li>Delivered every ${f(S.n)} weeks</li><li>Skip, pause, or cancel anytime</li><li>Swap designs before every delivery</li>`;
+  $("#cta").textContent = `Start subscription • ${usd0(tier().price)}`;
+  $("#after").innerHTML = `<li>Subscription: ${S.n} sets delivered every ${f(S.n)} weeks</li><li>Skip, pause, or cancel anytime</li><li>Swap designs before every delivery</li>`;
   $("#once").textContent = `Buy once – no savings • ${usd0(ONE_SET * S.n)}`;
   renderPanel();
 }

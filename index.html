@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WIREFRAME: Product page subscription (not final design)</title>
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; background: #fff; color: #222; font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+button { font: inherit; color: inherit; }
+.banner { background: #222; color: #fff; text-align: center; padding: 10px 16px; font-size: 13px; letter-spacing: .04em; }
+.banner b { letter-spacing: .12em; }
+.wrap { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+.hdr { border-bottom: 1px solid #ccc; }
+.hdr .wrap { display: flex; justify-content: space-between; align-items: center; height: 56px; }
+.box { border: 1px dashed #999; background: #f2f2f2; color: #888; display: grid; place-items: center; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; text-align: center; }
+.logo { width: 90px; height: 28px; }
+.navs { display: flex; gap: 10px; }
+.navs span { width: 70px; height: 10px; background: #ddd; border-radius: 2px; }
+.cart { border: 1px solid #999; padding: 4px 10px; font-size: 13px; }
+
+.pdp { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 28px 0 60px; align-items: start; }
+@media (max-width: 860px) { .pdp { grid-template-columns: 1fr; } }
+.gallery { display: grid; gap: 8px; }
+.main { aspect-ratio: 4 / 5; }
+.thumbs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.thumbs .box { aspect-ratio: 1; font-size: 10px; }
+
+.buy { display: grid; gap: 14px; }
+.eyebrow { font-size: 13px; color: #666; }
+h1 { font-size: 28px; margin: 0; font-weight: 600; }
+.lines { display: grid; gap: 6px; }
+.lines span { height: 9px; background: #e3e3e3; border-radius: 2px; }
+.lines span:last-child { width: 60%; }
+
+.sec { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; margin-top: 6px; }
+.sec::before, .sec::after { content: ""; flex: 1; height: 1px; background: #bbb; }
+
+.tiers { display: grid; gap: 12px; }
+.tier { position: relative; border: 1px solid #bbb; padding: 14px; cursor: pointer; background: #fff; }
+.tier[aria-checked="true"] { border: 2px solid #222; padding: 13px; }
+.row { display: grid; grid-template-columns: 22px 44px 1fr auto; gap: 12px; align-items: center; }
+.radio { width: 18px; height: 18px; border: 1.5px solid #666; border-radius: 50%; display: grid; place-items: center; }
+.tier[aria-checked="true"] .radio::after { content: ""; width: 9px; height: 9px; border-radius: 50%; background: #222; }
+.thumb { width: 44px; height: 44px; font-size: 9px; }
+.title { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.title b { font-size: 17px; }
+.pill { font-size: 12px; border: 1px solid #888; padding: 2px 8px; border-radius: 99px; background: #f4f4f4; }
+.sub { font-size: 13px; color: #666; }
+.price { text-align: right; white-space: nowrap; }
+.price b { font-size: 17px; }
+.price small { color: #666; }
+.price s { display: block; color: #777; font-size: 13px; }
+.label { position: absolute; top: -10px; right: 14px; background: #fff; border: 1px solid #222; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 2px 8px; }
+
+.inner { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px dashed #bbb; gap: 10px; }
+.tier[aria-checked="true"] .inner { display: grid; }
+.inner .lbl { font-size: 13px; font-weight: 600; }
+.freqs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.freqs button { border: 1px solid #999; background: #fff; padding: 8px 4px; cursor: pointer; display: grid; gap: 2px; align-content: start; font-size: 14px; font-weight: 600; }
+.freqs button[aria-checked="true"] { border: 2px solid #222; background: #f2f2f2; padding: 7px 3px; }
+.freqs small { font-size: 11px; font-weight: 400; color: #666; }
+.freqs em { font-style: normal; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; border: 1px solid #666; justify-self: center; padding: 0 5px; margin-top: 2px; }
+.checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 14px; }
+.checks li::before, .after li::before { content: "✓  "; font-weight: 700; }
+
+.designs { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 14px; border: 1px solid #ddd; padding: 10px 12px; background: #fafafa; }
+.link { background: none; border: 0; padding: 0; text-decoration: underline; cursor: pointer; font-size: 14px; }
+.cta { width: 100%; background: #222; color: #fff; border: 0; padding: 16px; font-size: 15px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
+.after { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 14px; }
+.once { justify-self: center; background: none; border: 0; border-bottom: 2px solid #222; padding: 2px 0; font-size: 14px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; }
+
+/* notes for the client */
+.notes { border: 1px solid #ccc; background: #fafafa; padding: 16px 20px; margin: 0 0 60px; font-size: 14px; }
+.notes h2 { font-size: 15px; margin: 0 0 8px; }
+.notes ol { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+.notes .ph { color: #666; margin-top: 10px; }
+
+/* mix-in panel */
+.shade { position: fixed; inset: 0; background: rgba(0,0,0,.35); display: none; z-index: 10; }
+.panel { position: fixed; top: 0; right: 0; bottom: 0; width: min(460px, 100%); background: #fff; border-left: 1px solid #999; z-index: 11; display: none; grid-template-rows: auto auto 1fr auto; grid-template-columns: minmax(0, 1fr); }
+.open .shade { display: block; }
+.open .panel { display: grid; }
+.phead { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-bottom: 1px solid #ccc; }
+.phead b { font-size: 17px; }
+.x { border: 1px solid #999; background: #fff; width: 32px; height: 32px; cursor: pointer; }
+.tray { padding: 12px 16px; border-bottom: 1px solid #ccc; display: grid; gap: 6px; font-size: 13px; color: #555; }
+.slots { display: grid; gap: 8px 6px; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.slot { display: grid; gap: 3px; min-width: 0; }
+.slot .box { aspect-ratio: 1; font-size: 8px; }
+.slot span { font-size: 11px; color: #222; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.slot.other .box { border-style: solid; border-color: #222; }
+.slot.other span { font-weight: 700; }
+.grid { overflow: auto; padding: 14px 16px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; align-content: start; grid-auto-rows: max-content; }
+.card { border: 1px solid #bbb; display: grid; min-width: 0; }
+.card.on { border: 2px solid #222; }
+.card .box { aspect-ratio: 1; border: 0; border-bottom: 1px dashed #999; font-size: 10px; }
+.card .nm { font-size: 13px; font-weight: 600; padding: 6px 8px 0; }
+.card .ctl { display: flex; justify-content: space-between; align-items: center; gap: 4px; padding: 6px 8px 8px; }
+.card .ctl button { border: 1px solid #999; background: #fff; min-width: 28px; height: 28px; cursor: pointer; font-size: 12px; }
+.card .ctl button.add { flex: 1; background: #222; color: #fff; border-color: #222; }
+.card .ctl button:disabled { opacity: .35; cursor: not-allowed; }
+.pfoot { padding: 12px 16px; border-top: 1px solid #ccc; }
+.toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); background: #222; color: #fff; padding: 10px 16px; font-size: 13px; display: none; z-index: 20; max-width: calc(100% - 32px); text-align: center; }
+.toast.on { display: block; }
+</style>
+</head>
+<body>
+
+<div class="banner"><b>WIREFRAME</b> · shows how the subscription works, not how it will look · not final design</div>
+
+<header class="hdr">
+  <div class="wrap">
+    <div class="box logo">Logo</div>
+    <div class="navs"><span></span><span></span><span></span><span></span></div>
+    <span class="cart" id="cart">Cart (0)</span>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="pdp">
+    <div class="gallery">
+      <div class="box main">Product image</div>
+      <div class="thumbs"><div class="box">Image</div><div class="box">Image</div><div class="box">Image</div><div class="box">Image</div></div>
+    </div>
+
+    <div class="buy">
+      <div>
+        <div class="eyebrow">Shade 09</div>
+        <h1>Almandine (product name)</h1>
+      </div>
+      <div class="lines"><span></span><span></span></div>
+
+      <div class="sec">Choose your sets</div>
+      <div class="tiers" id="tiers" role="radiogroup" aria-label="Sets per delivery"></div>
+
+      <div class="designs">
+        <span id="designsText">7 × Almandine</span>
+        <button class="link" type="button" id="openMix">Mix in other designs</button>
+      </div>
+
+      <button class="cta" type="button" id="cta">Subscribe • $55</button>
+      <ul class="after" id="after"></ul>
+      <button class="once" type="button" id="once">Buy once – no savings • $84</button>
+    </div>
+  </div>
+
+  <section class="notes">
+    <h2>How this works</h2>
+    <ol>
+      <li>The customer picks a tier: 5, 7 or 10 sets per delivery. 7 is selected by default.</li>
+      <li>Each tier has its own recommended delivery timing: 5 sets every 4 weeks, 7 every 6 weeks, 10 every 8 weeks. The customer can change it inside the selected tier.</li>
+      <li>Bigger tiers cost less per set: $8.00, $7.86, $7.50. "Just $x/day" updates with the timing.</li>
+      <li>All sets are the product the customer is on. "Mix in other designs" lets them swap some for other designs, same number of sets, same price.</li>
+      <li>Before every delivery the customer can swap designs, skip, pause or cancel.</li>
+      <li>"Buy once" is a one-time purchase of the same number of sets at full price, no subscription.</li>
+    </ol>
+    <p class="ph">Placeholder: the one-time price per set ($12). It drives the crossed-out prices, "Save $X" and the buy-once total. Design names in the mix-in panel are placeholders.</p>
+  </section>
+</main>
+
+<div class="shade" id="shade"></div>
+<aside class="panel" id="panel" aria-label="Mix in other designs">
+  <div class="phead"><b id="ptitle">Your 7 sets</b><button class="x" type="button" id="closeMix" aria-label="Close">×</button></div>
+  <div class="tray"><div class="slots" id="slots"></div><span id="pnote"></span></div>
+  <div class="grid" id="grid"></div>
+  <div class="pfoot"><button class="cta" type="button" id="done">Done</button></div>
+</aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const ONE_SET = 12;   /* placeholder one-time price per set */
+const TIERS = [
+  { n: 5,  price: 40, suggest: 4 },
+  { n: 7,  price: 55, suggest: 6, label: "Our pick" },
+  { n: 10, price: 75, suggest: 8, label: "Best deal" },
+];
+const FREQS = [4, 6, 8];
+const THIS = "this";
+const DESIGNS = [{ id: THIS, name: "Almandine" }].concat(Array.from({ length: 11 }, (_, i) => ({ id: "d" + (i + 1), name: "Design " + (i + 1) })));
+const byId = Object.fromEntries(DESIGNS.map(d => [d.id, d]));
+
+const S = { n: 7, freqByN: { 5: 4, 7: 6, 10: 8 }, picks: { [THIS]: 7 } };
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const tier = () => TIERS.find(t => t.n === S.n);
+const f = n => S.freqByN[n];
+const usd = v => "$" + v.toFixed(2);
+const usd0 = v => Number.isInteger(v) ? "$" + v : usd(v);
+const count = () => Object.values(S.picks).reduce((a, b) => a + b, 0);
+const mixed = () => Object.keys(S.picks).some(id => id !== THIS);
+
+function fitPicks() {
+  let diff = S.n - count();
+  if (diff > 0) S.picks[THIS] = (S.picks[THIS] || 0) + diff;
+  for (const id of Object.keys(S.picks).filter(id => id !== THIS).reverse().concat(THIS)) {
+    while (diff < 0 && S.picks[id] > 0) { S.picks[id]--; diff++; }
+    if (!S.picks[id]) delete S.picks[id];
+  }
+}
+
+function render() {
+  $("#tiers").innerHTML = TIERS.map(x => {
+    const fr = f(x.n), on = x.n === S.n;
+    return `<div class="tier" role="radio" tabindex="0" aria-checked="${on}" data-n="${x.n}">
+      ${x.label ? `<span class="label">${x.label}</span>` : ""}
+      <div class="row">
+        <span class="radio"></span>
+        <div class="box thumb">img</div>
+        <div>
+          <div class="title"><b>${x.n} Sets</b><span class="pill">Just ${usd(x.price / (fr * 7))}/day</span></div>
+          <div class="sub">Every ${fr} weeks${fr === x.suggest ? " (recommended)" : ""}</div>
+        </div>
+        <div class="price"><b>${usd(x.price / x.n)}</b><small>/set</small><s>${usd(ONE_SET)}</s></div>
+      </div>
+      <div class="inner">
+        <div class="lbl">Delivered every</div>
+        <div class="freqs" role="radiogroup" aria-label="Delivery frequency">${FREQS.map(v => `<button type="button" role="radio" aria-checked="${v === fr}" data-f="${v}">${v} weeks<small>new set every ~${Math.round(v * 7 / x.n)} days</small>${v === x.suggest ? "<em>Recommended</em>" : ""}</button>`).join("")}</div>
+        <ul class="checks"><li>Save ${usd(ONE_SET * x.n - x.price)} on every delivery</li><li>Swap designs before each delivery</li></ul>
+      </div>
+    </div>`;
+  }).join("");
+  $$(".tier").forEach(el => {
+    const pick = () => { if (+el.dataset.n !== S.n) { S.n = +el.dataset.n; fitPicks(); render(); } };
+    el.onclick = pick;
+    el.onkeydown = e => { if ((e.key === "Enter" || e.key === " ") && e.target === el) { e.preventDefault(); pick(); } };
+  });
+  $$("[data-f]").forEach(b => b.onclick = e => { e.stopPropagation(); S.freqByN[S.n] = +b.dataset.f; render(); });
+
+  $("#designsText").textContent = mixed() ? Object.entries(S.picks).map(([id, q]) => `${q} × ${byId[id].name}`).join(", ") : `${S.n} × Almandine`;
+  $("#openMix").textContent = mixed() ? "Change designs" : "Mix in other designs";
+  $("#cta").textContent = `Subscribe • ${usd0(tier().price)}`;
+  $("#after").innerHTML = `<li>Delivered every ${f(S.n)} weeks</li><li>Skip, pause, or cancel anytime</li><li>Swap designs before every delivery</li>`;
+  $("#once").textContent = `Buy once – no savings • ${usd0(ONE_SET * S.n)}`;
+  renderPanel();
+}
+
+function renderPanel() {
+  const flat = Object.entries(S.picks).flatMap(([id, q]) => Array(q).fill(id));
+  $("#slots").style.setProperty("--n", S.n);
+  $("#slots").innerHTML = flat.map(id => `<div class="slot ${id === THIS ? "" : "other"}" title="${byId[id].name}"><div class="box">img</div><span>${byId[id].name}</span></div>`).join("");
+  $("#ptitle").textContent = `Your ${S.n} sets`;
+  $("#pnote").textContent = `Swap some Almandine for other designs. Still ${S.n} sets, same price.`;
+  $("#done").textContent = `Done • ${S.n} sets, ${usd0(tier().price)}`;
+  const left = S.picks[THIS] || 0;
+  $("#grid").innerHTML = DESIGNS.map(d => {
+    const q = S.picks[d.id] || 0;
+    const ctl = d.id === THIS
+      ? `<span style="font-size:11px;color:#666">This product · fills the rest (${q})</span>`
+      : q ? `<button type="button" data-m="${d.id}" aria-label="Remove one">−</button><b>${q}</b><button type="button" data-p="${d.id}" ${left ? "" : "disabled"} aria-label="Add one">+</button>`
+          : `<button type="button" class="add" data-p="${d.id}" ${left ? "" : "disabled"}>Swap in</button>`;
+    return `<div class="card ${q ? "on" : ""}"><div class="box">Design image</div><div class="nm">${d.name}</div><div class="ctl">${ctl}</div></div>`;
+  }).join("");
+  $$("[data-p]").forEach(b => b.onclick = () => { if (S.picks[THIS] > 0) { S.picks[THIS]--; if (!S.picks[THIS]) delete S.picks[THIS]; S.picks[b.dataset.p] = (S.picks[b.dataset.p] || 0) + 1; render(); } });
+  $$("[data-m]").forEach(b => b.onclick = () => { const id = b.dataset.m; S.picks[id]--; if (!S.picks[id]) delete S.picks[id]; S.picks[THIS] = (S.picks[THIS] || 0) + 1; render(); });
+}
+
+const open = () => document.body.classList.add("open"), close = () => document.body.classList.remove("open");
+$("#openMix").onclick = open; $("#closeMix").onclick = close; $("#shade").onclick = close; $("#done").onclick = close;
+document.addEventListener("keydown", e => { if (e.key === "Escape") close(); });
+
+let tt; const toast = m => { const t = $("#toast"); t.textContent = m; t.classList.add("on"); clearTimeout(tt); tt = setTimeout(() => t.classList.remove("on"), 3000); };
+$("#cta").onclick = () => { $("#cart").textContent = "Cart (1)"; toast(`Subscription added: ${$("#designsText").textContent}, every ${f(S.n)} weeks, ${usd0(tier().price)} per delivery.`); };
+$("#once").onclick = () => { $("#cart").textContent = "Cart (1)"; toast(`One-time purchase added: ${S.n} sets, ${usd0(ONE_SET * S.n)}.`); };
+
+render();
+</script>
+</body>
+</html>

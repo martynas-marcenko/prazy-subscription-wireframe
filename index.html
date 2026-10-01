@@ -133,11 +133,21 @@ button { font: inherit; color: inherit; }
 .co { max-width: 620px; margin: 0 auto; padding: 18px 20px 60px; display: grid; gap: 12px; }
 .co .box { height: 260px; font-size: 13px; }
 .co p { margin: 0; font-size: 14px; }
+/* mobile = picker option C (variants/c.html), chosen 2026-10-01: joined sets control, the price centred
+   and larger, the delivery buttons under it, the box's slots in one row of squares (no names) */
 @media (max-width: 700px) {
+  .picker .wrap { gap: 10px; }
+  .tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid #222; border-radius: 10px; overflow: hidden; }
+  .tabs button, .tabs button[aria-checked="true"] { border: 0; border-left: 1px solid #222; border-radius: 0; padding: 8px 0; }
+  .tabs button:first-child { border-left: 0; }
+  .pline b { font-size: 24px; }
+  .pline .save { font-size: 17px; }
+  .slots { grid-template-columns: repeat(var(--n), minmax(0, 1fr)); padding-top: 6px; }
   .slot { width: auto; }
   .slot .sq { width: 100%; height: auto; aspect-ratio: 1; }
-  .slot .rm { top: -6px; right: -5px; width: 16px; height: 16px; font-size: 10px; }
-  .slot span { font-size: 9px; white-space: normal; line-height: 1.15; }
+  .slot .rm { top: -6px; right: -6px; width: 18px; height: 18px; font-size: 11px; }
+  .slot.full .sq { background: #d6d6d6; }
+  .slot span { display: none; }
 }
 @media (max-width: 700px) {
   .filters { flex-wrap: nowrap; overflow-x: auto; }

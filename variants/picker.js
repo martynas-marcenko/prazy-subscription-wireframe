@@ -24,7 +24,6 @@ const tabs = () => `<div class="tabs" role="radiogroup" aria-label="Sets per del
 const seg = () => `<div class="seg" role="radiogroup" aria-label="Sets per delivery">${TIERS.map(t => `<button type="button" role="radio" aria-checked="${t.n === S.n}" data-n="${t.n}">${t.n} sets</button>`).join("")}</div>`;
 const price = () => `<div class="price"><b>$${tier().price}</b> <span>(Save $${save()})</span></div>`;
 const freqButtons = () => `<div class="freqs" role="radiogroup" aria-label="Delivered every"><span class="lbl">Delivered every</span>${FREQS.map(f => `<button type="button" role="radio" aria-checked="${f === S.freq}" data-f="${f}">${f} weeks</button>`).join("")}</div>`;
-const freqSelect = () => `<select class="freq-sel" aria-label="Delivered every">${FREQS.map(f => `<option value="${f}" ${f === S.freq ? "selected" : ""}>Every ${f} weeks</option>`).join("")}</select>`;
 const chevron = (disabledWhenEmpty = true) => `<button class="drawer" type="button" aria-expanded="${S.open}" aria-label="${S.open ? "Hide" : "Show"} your picks" ${disabledWhenEmpty && !S.picks.length ? "disabled" : ""}>${CHEVRON}<span class="count">${S.picks.length}</span></button>`;
 const thumbs = () => `<div class="thumbs" style="--cols:${S.n <= 7 ? S.n : 5}">${Array.from({ length: S.n }, (_, i) => {
   const id = S.picks[i];
@@ -58,16 +57,16 @@ const LAYOUTS = {
     ${freqButtons()}
     <div class="row">${S.open ? picked() : strip()}${chevron()}</div>
     ${S.open ? thumbs() : ""}`,
-  /* C. Compact: joined segmented control, the price centred on its own line (Leon, 2026-10-01: on the
-     left beside the dropdown it gets missed), the weeks dropdown under it, then the tray of picks */
+  /* C. Compact: joined segmented control, the price centred on its own line (Leon, 2026-10-01: off to
+     the left it gets missed), the delivery buttons under it, then the tray of picks */
   c: () => `${seg()}
     <div class="row center">${price()}</div>
-    <div class="row center">${freqSelect()}</div>
+    ${freqButtons()}
     ${S.picks.length ? tray() : ""}`,
-  /* F. C's original row kept (price left, weeks dropdown right), the price set on a green tint so it
-     is not missed (the other answer to Leon's 2026-10-01 note, without making the picker taller) */
+  /* F. C with the price set on a green tint, so it is not missed */
   f: () => `${seg()}
-    <div class="row">${price()}${freqSelect()}</div>
+    <div class="row center">${price()}</div>
+    ${freqButtons()}
     ${S.picks.length ? tray() : ""}`,
   /* D. Summary: one line while browsing (the plan left; the box's slots running under "Edit" with
      the pick count right);
@@ -127,7 +126,6 @@ function bind(root) {
     render();
   });
   root.querySelectorAll("[data-f]").forEach(b => b.onclick = () => { S.freq = +b.dataset.f; render(); });
-  const sel = root.querySelector(".freq-sel"); if (sel) sel.onchange = e => { S.freq = +e.target.value; render(); };
   root.querySelectorAll("[data-go]").forEach(b => b.onclick = () => goToCard(b.dataset.go));
   root.querySelectorAll("[data-rm]").forEach(b => b.onclick = () => { S.picks.splice(+b.dataset.rm, 1); if (!S.picks.length && VARIANT !== "d" && VARIANT !== "e") S.open = false; render(); });
 }

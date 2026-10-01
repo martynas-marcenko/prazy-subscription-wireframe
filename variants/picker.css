@@ -1,3 +1,4 @@
+/* Shared wireframe styles for the mobile picker variants (greyscale, not final design). */
 * { box-sizing: border-box; }
 body { margin: 0; background: #fff; color: #222; font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
 button, select { font: inherit; color: inherit; }
@@ -18,29 +19,38 @@ button:focus-visible, select:focus-visible { outline: 2px solid #222; outline-of
 .steps .on { color: #222; font-weight: 700; }
 .steps .on i { background: #222; color: #fff; border-color: #222; }
 
+/* pinned picker */
 .picker { position: sticky; top: 0; z-index: 5; background: #fff; border-bottom: 2px solid #222; box-shadow: 0 4px 10px rgba(0,0,0,.06); }
 .picker .wrap { display: grid; gap: 10px; padding-top: 10px; padding-bottom: 10px; }
 .row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .center { justify-content: center; }
 
+/* set tabs */
 .tabs { display: flex; justify-content: center; gap: 8px; }
 .tabs button { border: 1px solid #999; background: #fff; border-radius: 99px; padding: 5px 16px; cursor: pointer; font-weight: 600; }
 .tabs button[aria-checked="true"] { background: #222; color: #fff; border-color: #222; }
+/* joined segmented control (variant C) */
 .seg { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid #222; border-radius: 10px; overflow: hidden; }
 .seg button { border: 0; border-left: 1px solid #222; background: #fff; padding: 8px 0; font-weight: 600; cursor: pointer; }
 .seg button:first-child { border-left: 0; }
 .seg button[aria-checked="true"] { background: #222; color: #fff; }
 
+/* price */
 .price { font-size: 15px; white-space: nowrap; }
 .price b { font-size: 18px; }
-.price span { font-weight: 700; }
+.price span { font-weight: 700; color: #166534; } /* savings in green: 7.1:1 on #fff, 6.4:1 on the bar's #f2f2f2 */
+.save { font-weight: 700; color: #166534; white-space: nowrap; }
+[data-variant="c"] .price b { font-size: 24px; }
+[data-variant="c"] .price span { font-size: 17px; }
 
+/* delivery */
 .freqs { display: flex; gap: 6px; align-items: center; justify-content: center; }
 .freqs .lbl { font-size: 13px; color: #555; }
 .freqs button { border: 1px solid #999; background: #fff; padding: 4px 9px; cursor: pointer; font-size: 13px; }
 .freqs button[aria-checked="true"] { border: 2px solid #222; background: #f2f2f2; padding: 3px 8px; font-weight: 700; }
 .freq-sel { border: 1px solid #999; background: #fff; padding: 6px 8px; font-size: 13px; }
 
+/* chevron with count (mix-and-match BundleDrawerTrigger) */
 .drawer { position: relative; flex: none; width: 44px; height: 44px; border: 0; border-radius: 8px; background: #222; color: #fff; display: grid; place-items: center; cursor: pointer; }
 .drawer:disabled { background: #999; cursor: not-allowed; }
 .drawer svg { transition: transform .2s; }
@@ -48,6 +58,7 @@ button:focus-visible, select:focus-visible { outline: 2px solid #222; outline-of
 .drawer .count { position: absolute; top: -8px; right: -6px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 99px; background: #ccc; color: #222; font-size: 12px; font-weight: 700; display: grid; place-items: center; }
 @media (prefers-reduced-motion: reduce) { .drawer svg { transition: none; } }
 
+/* thumbs */
 .thumbs { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); gap: 6px; }
 .thumb { display: grid; gap: 3px; min-width: 0; }
 .thumb .sq { position: relative; aspect-ratio: 1; border: 1px dashed #999; background: #fafafa; }
@@ -55,21 +66,34 @@ button:focus-visible, select:focus-visible { outline: 2px solid #222; outline-of
 .thumb .rm { position: absolute; top: -6px; right: -5px; width: 16px; height: 16px; border-radius: 50%; border: 1px solid #222; background: #fff; font-size: 10px; line-height: 1; display: grid; place-items: center; padding: 0; cursor: pointer; }
 .thumb span { font-size: 9px; text-align: center; line-height: 1.15; color: #666; overflow-wrap: anywhere; }
 .thumb.full span { color: #222; font-weight: 600; }
+/* mini strip (variants B, C): small squares, no names */
 .strip { flex: 1; display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 4px; max-width: 290px; }
-.strip.wide { max-width: none; }
 .strip i { aspect-ratio: 1; border: 1px dashed #999; background: #fafafa; }
 .strip i.full { border: 1px solid #222; background: #d6d6d6; }
+/* tray (variant C): every slot of the box; a picked slot is a button to its card, with a × to remove it */
+.tray { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 5px; padding-top: 6px; }
+.ts { position: relative; aspect-ratio: 1; border: 1px dashed #999; background: #fafafa; }
+.ts.full { border: 1px solid #222; background: #d6d6d6; }
+.ts .go { display: block; width: 100%; height: 100%; border: 0; padding: 0; background: none; font-size: 9px; color: #555; letter-spacing: .04em; cursor: pointer; }
+.ts .rm { position: absolute; top: -6px; right: -6px; width: 18px; height: 18px; border-radius: 50%; border: 1px solid #222; background: #fff; font-size: 11px; line-height: 1; display: grid; place-items: center; padding: 0; cursor: pointer; }
 .sum { flex: 1; min-width: 0; font-size: 13px; line-height: 1.3; }
 .sum > b { display: block; font-size: 14px; }
 .picked { flex: 1; font-size: 14px; font-weight: 600; }
 .panel { display: grid; gap: 10px; border-top: 1px dashed #bbb; padding-top: 10px; }
 
-.sumrow { gap: 12px; align-items: stretch; min-width: 0; } .sumrow .sum { flex: none; display: grid; align-content: center; border: 2px solid #cfcfcf; border-radius: 12px; padding: 3px 12px; background: #fff; line-height: 1.2; }
+/* "Edit" on the summary (variant D) and the settings sheet it opens */
+/* the summary row: the plan and price framed on the left; on the right the box's slots (picked,
+   then empty) at the button's height, running under the black "Edit" and hidden behind it, as the
+   mix-and-match bundle bar does */
+.sumrow { gap: 12px; align-items: stretch; min-width: 0; } /* a grid item: shrink to the column, never grow to the slots */
+.sumrow .sum { flex: none; display: grid; align-content: center; border: 2px solid #cfcfcf; border-radius: 12px; padding: 3px 12px; background: #fff; line-height: 1.2; }
 .sum-act { flex: 1; min-width: 0; display: flex; align-items: stretch; }
 .slots { flex: 1; min-width: 0; display: flex; gap: 6px; overflow: hidden; }
 .slots i { flex: none; height: 100%; aspect-ratio: 1; border: 1.5px dashed #999; border-radius: 8px; background: #fafafa; }
 .slots i.full { border: 1px solid #222; background: #d6d6d6; }
-.sumrow .edit { height: auto; margin-left: -22px; z-index: 1; box-shadow: 0 0 0 4px #fff; } .sum.sum-edit { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 3px 3px 3px 12px; }
+.sumrow .edit { height: auto; margin-left: -22px; z-index: 1; box-shadow: 0 0 0 4px #fff; } /* overlaps the slots: they pass under it */
+/* E: "Edit" inside the plan's frame, at its right; the slots fill the rest of the row */
+.sum.sum-edit { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 3px 3px 3px 12px; }
 .sum-edit .edit { height: 40px; padding: 0 14px; }
 .sumrow .sum-edit .edit { margin-left: 0; box-shadow: none; }
 .edit { position: relative; flex: none; height: 44px; border: 0; border-radius: 8px; background: #222; color: #fff; padding: 0 18px; font-weight: 700; cursor: pointer; }
@@ -86,6 +110,7 @@ button:focus-visible, select:focus-visible { outline: 2px solid #222; outline-of
 .sh-ft { padding: 0 16px 16px; }
 .sh-ft .btn { width: 100%; }
 
+/* grid */
 .intro h1 { margin: 16px 0 10px; font-size: 22px; font-weight: 600; }
 .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding-bottom: 110px; }
 @media (min-width: 701px) { .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
@@ -95,8 +120,11 @@ button:focus-visible, select:focus-visible { outline: 2px solid #222; outline-of
 .card .ctl { display: flex; justify-content: space-between; align-items: center; gap: 4px; padding: 7px 8px 9px; }
 .card .ctl button { border: 1px solid #999; background: #fff; min-width: 34px; height: 32px; cursor: pointer; }
 .card .ctl button.add { flex: 1; background: #222; color: #fff; border-color: #222; font-weight: 600; }
+.card.flash { animation: flash 1.2s ease-out; }
+@keyframes flash { 0%, 40% { outline: 3px solid #222; outline-offset: 2px; } 100% { outline: 3px solid transparent; outline-offset: 2px; } }
 .card .ctl button:disabled { opacity: .35; cursor: not-allowed; }
 
+/* bottom bar */
 .bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; background: #f2f2f2; border-top: 2px solid #222; }
 .bar .wrap { display: flex; justify-content: space-between; align-items: center; gap: 12px; height: 64px; }
 .bar .tot { font-size: 14px; }

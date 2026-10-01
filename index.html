@@ -4,6 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>WIREFRAME: Subscription flow (not final design)</title>
+<!--
+  Leon's second iteration (Looms, 2026-09-29):
+  step 1 = all designs visible (Heylinn grid) + a sticky picker that follows the scroll (Dr. Squatch
+  subscription-flow): sets tabs 7 / 10 / 5, price + save, delivery 4/6/8, one slot per set.
+  step 2 = "stay on subscription" plan step (Glaize pick-plan + his Figma): subscription card vs buy once.
+  step 3 = Shopify checkout. One-time price per set = $12 (his number). Subscription $40 / $60 / $80.
+-->
 <style>
 * { box-sizing: border-box; }
 body { margin: 0; background: #fff; color: #222; font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
@@ -20,7 +27,7 @@ button { font: inherit; color: inherit; }
 @media (max-width: 600px) { .navs { display: none; } }
 .cart { border: 1px solid #999; padding: 4px 10px; font-size: 13px; }
 
-
+/* progress */
 .steps { display: flex; justify-content: center; gap: 8px; padding: 12px 0 4px; font-size: 13px; color: #888; }
 .steps span { display: flex; align-items: center; gap: 6px; }
 .steps span + span::before { content: ""; width: 28px; height: 1px; background: #bbb; margin-right: 2px; }
@@ -29,7 +36,7 @@ button { font: inherit; color: inherit; }
 .steps .on i { background: #222; color: #fff; border-color: #222; }
 .steps .done i { background: #ddd; }
 
-
+/* sticky picker (step 1) */
 .picker { position: sticky; top: 0; z-index: 5; background: #fff; border-bottom: 2px solid #222; box-shadow: 0 4px 10px rgba(0,0,0,.06); }
 .picker .wrap { display: grid; gap: 12px; padding-top: 14px; padding-bottom: 14px; }
 .tabs { display: flex; justify-content: center; gap: 8px; }
@@ -37,7 +44,7 @@ button { font: inherit; color: inherit; }
 .tabs button[aria-checked="true"] { background: #222; color: #fff; border-color: #222; }
 .pline { text-align: center; font-size: 15px; margin-top: 2px; }
 .pline b { font-size: 17px; }
-.pline .save { font-weight: 700; }
+.pline .save, .bar .save { font-weight: 700; color: #166534; white-space: nowrap; } /* savings in green: 7.1:1 on #fff, 6.4:1 on the bar's #f2f2f2 */
 .mid { display: flex; justify-content: center; align-items: center; gap: 16px; }
 .freqs { display: flex; gap: 6px; align-items: center; flex: none; }
 .freqs .lbl { font-size: 13px; color: #555; margin-right: 2px; }
@@ -46,8 +53,6 @@ button { font: inherit; color: inherit; }
 .slots { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
 @media (max-width: 700px) {
   .slots { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); gap: 5px; }
-  .slot { width: auto; }
-  .slot .sq { width: 100%; height: auto; aspect-ratio: 1; }
   .mid { justify-content: center; }
   .picker .wrap { gap: 7px; padding-top: 10px; padding-bottom: 8px; }
   .tabs button { padding: 5px 14px; }
@@ -63,9 +68,11 @@ button { font: inherit; color: inherit; }
 .slot .rm { position: absolute; top: -7px; right: -7px; width: 18px; height: 18px; border-radius: 50%; border: 1px solid #222; background: #fff; font-size: 11px; line-height: 1; display: grid; place-items: center; padding: 0; cursor: pointer; }
 .slot span { font-size: 11px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #666; }
 .slot.full span { color: #222; font-weight: 600; }
+.card.flash { animation: flash 1.2s ease-out; }
+@keyframes flash { 0%, 40% { outline: 3px solid #222; outline-offset: 2px; } 100% { outline: 3px solid transparent; outline-offset: 2px; } }
 .slot.pop .sq { outline: 3px solid #222; outline-offset: 1px; }
 
-
+/* grid (step 1) */
 .intro { padding: 18px 0 6px; }
 .intro h1 { margin: 0; font-size: 24px; font-weight: 600; }
 .intro p { margin: 2px 0 0; color: #666; font-size: 14px; }
@@ -87,7 +94,7 @@ button { font: inherit; color: inherit; }
 .card .ctl button.add { flex: 1; background: #222; color: #fff; border-color: #222; font-weight: 600; }
 .card .ctl button:disabled { opacity: .35; cursor: not-allowed; }
 
-
+/* bottom bar */
 .bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; background: #f2f2f2; border-top: 2px solid #222; }
 .bar .wrap { display: flex; justify-content: space-between; align-items: center; gap: 12px; height: 64px; }
 .bar .tot { font-size: 14px; }
@@ -96,7 +103,7 @@ button { font: inherit; color: inherit; }
 .btn:disabled { background: #999; cursor: not-allowed; }
 .btn.ghost { background: #fff; color: #222; border: 1px solid #222; }
 
-
+/* plan (step 2) */
 .plan { max-width: 620px; margin: 0 auto; padding: 18px 20px 120px; display: grid; gap: 14px; }
 .plan h1 { text-align: center; font-size: 24px; margin: 0; font-weight: 600; }
 .opt { position: relative; border: 1px solid #bbb; padding: 14px; cursor: pointer; background: #fff; display: grid; gap: 12px; }
@@ -114,6 +121,7 @@ button { font: inherit; color: inherit; }
 .price b { font-size: 20px; }
 .price s { color: #777; font-size: 14px; }
 .chip { font-size: 12px; font-weight: 700; border: 1px solid #222; padding: 1px 7px; }
+.chip.save { color: #166534; border-color: #166534; }
 .inner { display: none; border-top: 1px dashed #bbb; padding-top: 12px; gap: 10px; }
 .opt[aria-checked="true"] .inner { display: grid; }
 .inner select { font: inherit; padding: 8px; border: 1px solid #999; background: #fff; width: 100%; }
@@ -121,11 +129,16 @@ button { font: inherit; color: inherit; }
 .checks li::before { content: "✓  "; font-weight: 700; }
 .navrow { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; }
 
-
+/* checkout (step 3) */
 .co { max-width: 620px; margin: 0 auto; padding: 18px 20px 60px; display: grid; gap: 12px; }
 .co .box { height: 260px; font-size: 13px; }
 .co p { margin: 0; font-size: 14px; }
-@media (max-width: 700px) { .slot span { font-size: 9px; white-space: normal; line-height: 1.15; } }
+@media (max-width: 700px) {
+  .slot { width: auto; }
+  .slot .sq { width: 100%; height: auto; aspect-ratio: 1; }
+  .slot .rm { top: -6px; right: -5px; width: 16px; height: 16px; font-size: 10px; }
+  .slot span { font-size: 9px; white-space: normal; line-height: 1.15; }
+}
 @media (max-width: 700px) {
   .filters { flex-wrap: nowrap; overflow-x: auto; }
   .filters button { flex: none; }
@@ -154,6 +167,7 @@ button { font: inherit; color: inherit; }
   <span data-s="3"><i>3</i>Checkout</span>
 </div>
 
+<!-- STEP 1 -->
 <section id="s1">
   <div class="picker" id="picker">
     <div class="wrap">
@@ -182,6 +196,7 @@ button { font: inherit; color: inherit; }
   </div>
 </section>
 
+<!-- STEP 2 -->
 <section id="s2" hidden>
   <div class="plan">
     <h1>Pick your plan</h1>
@@ -195,7 +210,7 @@ button { font: inherit; color: inherit; }
             <div class="ttl"><b id="subN">7 Sets</b><span class="tag">Subscribe &amp; save</span></div>
             <div class="sub" id="subF">Delivered every 6 weeks</div>
           </div>
-          <div class="price"><b id="subP">Start now $60</b><s id="subS">$84</s><span class="chip" id="subOff">Save 28%</span><span class="chip">Free shipping every order</span></div>
+          <div class="price"><b id="subP">Start now $60</b><s id="subS">$84</s><span class="chip save" id="subOff">Save 28%</span><span class="chip">Free shipping every order</span></div>
         </div>
         <div class="inner">
           <select id="subSel" aria-label="Delivery frequency"></select>
@@ -224,6 +239,7 @@ button { font: inherit; color: inherit; }
   </div>
 </section>
 
+<!-- STEP 3 -->
 <section id="s3" hidden>
   <div class="co">
     <div class="box">Shopify checkout (payment)</div>
@@ -233,8 +249,8 @@ button { font: inherit; color: inherit; }
 
 
 <script>
-const ONE_SET = 12;
-const TIERS = [
+const ONE_SET = 12;                         /* one-time price per set */
+const TIERS = [                             /* shown in this order (Squatch's 6/10/4), 7 is the default */
   { n: 7,  price: 60 },
   { n: 10, price: 80 },
   { n: 5,  price: 40 },
@@ -268,17 +284,31 @@ function renderPicker() {
   $$("#freqs button").forEach(b => b.onclick = () => { S.freq = +b.dataset.f; render(); });
 
   const slots = $("#slots");
-  slots.hidden = S.picks.length === 0;
+  slots.hidden = S.picks.length === 0;   /* the slot row appears once the first design is added */
   slots.style.setProperty("--n", S.n);
   slots.style.setProperty("--cols", S.n <= 7 ? S.n : 5);
   slots.innerHTML = Array.from({ length: S.n }, (_, i) => {
     const id = S.picks[i];
     return id
-      ? `<div class="slot full" data-i="${i}"><div class="sq" title="Tap to remove">img<button type="button" class="rm" data-rm="${i}" aria-label="Remove ${byId[id].name}">×</button></div><span>${byId[id].name}</span></div>`
+      ? `<div class="slot full" data-i="${i}"><div class="sq" role="button" tabindex="0" data-go="${id}" aria-label="Show ${byId[id].name} in the grid">img<button type="button" class="rm" data-rm="${i}" aria-label="Remove ${byId[id].name}">×</button></div><span>${byId[id].name}</span></div>`
       : `<div class="slot"><div class="sq"></div><span>Colour ${i + 1}</span></div>`;
   }).join("");
   $$("[data-rm]").forEach(b => b.onclick = e => { e.stopPropagation(); S.picks.splice(+b.dataset.rm, 1); render(); });
-  $$(".slot.full .sq").forEach(sq => sq.onclick = () => { S.picks.splice(+sq.parentElement.dataset.i, 1); render(); });
+  /* tapping a picked slot jumps to its design in the grid (Leon, 2026-10-01), so a pick is changed where it was made; × removes it */
+  $$(".slot.full .sq").forEach(sq => {
+    sq.onclick = () => goToCard(sq.dataset.go);
+    sq.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); goToCard(sq.dataset.go); } };
+  });
+}
+
+/* scroll a design's card into view below the pinned picker and flash it */
+function goToCard(id) {
+  if (!$(`.card[data-id="${id}"]`)) { S.filter = "All"; renderGrid(); }   /* a colour filter may hide it */
+  const card = $(`.card[data-id="${id}"]`); if (!card) return;
+  card.style.scrollMarginTop = `${$(".picker").offsetHeight + 12}px`;
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  card.scrollIntoView({ behavior: still ? "auto" : "smooth", block: "start" });
+  card.classList.remove("flash"); void card.offsetWidth; card.classList.add("flash");
 }
 
 function renderGrid() {
@@ -290,7 +320,7 @@ function renderGrid() {
     const ctl = q
       ? `<button type="button" data-m="${d.id}" aria-label="Remove one">−</button><b>${q}</b><button type="button" data-p="${d.id}" ${full ? "disabled" : ""} aria-label="Add one">+</button>`
       : `<button type="button" class="add" data-p="${d.id}" ${full ? "disabled" : ""}>Add</button>`;
-    return `<div class="card">
+    return `<div class="card" data-id="${d.id}">
       <div class="box img">${d.isNew ? `<span class="new">New</span>` : ""}<span class="b">Product image</span><span class="h">On-hand photo<br>(shows on hover)</span></div>
       <div class="nm">${d.name}</div>
       <div class="ctl">${ctl}</div>
@@ -308,7 +338,7 @@ function renderGrid() {
 
 function renderBar() {
   const l = left();
-  $("#tot").innerHTML = `Total: <b>${usd(tier().price)}</b> (${usd(save())} saved)`;
+  $("#tot").innerHTML = `Total: <b>${usd(tier().price)}</b> <span class="save">(${usd(save())} saved)</span>`;
   $("#next").disabled = l > 0;
   $("#next").textContent = l > 0 ? `Add ${l} more set${l === 1 ? "" : "s"} to continue` : "Next";
 }

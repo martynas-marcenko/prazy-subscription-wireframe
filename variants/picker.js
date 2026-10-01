@@ -42,7 +42,7 @@ const LAYOUTS = {
     ${S.open ? thumbs() : ""}`,
     c: () => `${seg()}
     <div class="row">${price()}${freqSelect()}</div>
-    <div class="row">${strip(true)}</div>`,
+    ${S.picks.length ? `<div class="row">${strip(true)}</div>` : ""}`,
     d: () => `<div class="row sumrow"><div class="sum"><b>${S.n} sets, every ${S.freq} weeks</b>${price()}</div>
     <div class="sum-act">${slots()}<button class="edit" type="button" aria-haspopup="dialog" aria-label="Edit your box, ${S.picks.length} designs picked">Edit<span class="count">${S.picks.length}</span></button></div></div>`,
 };

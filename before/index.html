@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WIREFRAME: Subscription flow (not final design)</title>
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; background: #fff; color: #222; font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+button { font: inherit; color: inherit; }
+.banner { background: #222; color: #fff; text-align: center; padding: 8px 16px; font-size: 13px; letter-spacing: .04em; }
+.banner b { letter-spacing: .12em; }
+.wrap { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+.hdr { border-bottom: 1px solid #ccc; background: #fff; }
+.hdr .wrap { display: flex; justify-content: space-between; align-items: center; height: 52px; gap: 12px; }
+.box { border: 1px dashed #999; background: #f2f2f2; color: #888; display: grid; place-items: center; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; text-align: center; }
+.logo { width: 90px; height: 26px; }
+.navs { display: flex; gap: 10px; }
+.navs span { width: 60px; height: 10px; background: #ddd; border-radius: 2px; }
+@media (max-width: 600px) { .navs { display: none; } }
+.cart { border: 1px solid #999; padding: 4px 10px; font-size: 13px; }
+
+
+.steps { display: flex; justify-content: center; gap: 8px; padding: 12px 0 4px; font-size: 13px; color: #888; }
+.steps span { display: flex; align-items: center; gap: 6px; }
+.steps span + span::before { content: ""; width: 28px; height: 1px; background: #bbb; margin-right: 2px; }
+.steps i { font-style: normal; width: 22px; height: 22px; border: 1px solid #999; border-radius: 50%; display: grid; place-items: center; font-size: 12px; }
+.steps .on { color: #222; font-weight: 700; }
+.steps .on i { background: #222; color: #fff; border-color: #222; }
+.steps .done i { background: #ddd; }
+
+
+.picker { position: sticky; top: 0; z-index: 5; background: #fff; border-bottom: 2px solid #222; box-shadow: 0 4px 10px rgba(0,0,0,.06); }
+.picker .wrap { display: grid; gap: 12px; padding-top: 14px; padding-bottom: 14px; }
+.tabs { display: flex; justify-content: center; gap: 8px; }
+.tabs button { position: relative; border: 1px solid #999; background: #fff; border-radius: 99px; padding: 7px 18px; cursor: pointer; font-weight: 600; }
+.tabs button[aria-checked="true"] { background: #222; color: #fff; border-color: #222; }
+.pline { text-align: center; font-size: 15px; margin-top: 2px; }
+.pline b { font-size: 17px; }
+.pline .save { font-weight: 700; }
+.mid { display: flex; justify-content: center; align-items: center; gap: 16px; }
+.freqs { display: flex; gap: 6px; align-items: center; flex: none; }
+.freqs .lbl { font-size: 13px; color: #555; margin-right: 2px; }
+.freqs button { border: 1px solid #999; background: #fff; padding: 5px 12px; cursor: pointer; font-size: 13px; }
+.freqs button[aria-checked="true"] { border: 2px solid #222; background: #f2f2f2; padding: 4px 11px; font-weight: 700; }
+.slots { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+@media (max-width: 700px) {
+  .slots { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); gap: 5px; }
+  .slot { width: auto; }
+  .slot .sq { width: 100%; height: auto; aspect-ratio: 1; }
+  .mid { justify-content: center; }
+  .picker .wrap { gap: 7px; padding-top: 10px; padding-bottom: 8px; }
+  .tabs button { padding: 5px 14px; }
+  .freqs { justify-content: center; }
+  .freqs button { padding: 4px 9px; }
+  .freqs button[aria-checked="true"] { padding: 3px 8px; }
+  .steps { font-size: 12px; gap: 4px; }
+  .steps span + span::before { width: 12px; }
+}
+.slot { display: grid; gap: 4px; width: 64px; min-width: 0; }
+.slot .sq { position: relative; width: 64px; height: 64px; border: 1px dashed #999; background: #fafafa; display: grid; place-items: center; font-size: 20px; color: #999; }
+.slot.full .sq { border: 1px solid #222; background: #e9e9e9; color: #555; font-size: 9px; text-transform: uppercase; letter-spacing: .04em; cursor: pointer; }
+.slot .rm { position: absolute; top: -7px; right: -7px; width: 18px; height: 18px; border-radius: 50%; border: 1px solid #222; background: #fff; font-size: 11px; line-height: 1; display: grid; place-items: center; padding: 0; cursor: pointer; }
+.slot span { font-size: 11px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #666; }
+.slot.full span { color: #222; font-weight: 600; }
+.slot.pop .sq { outline: 3px solid #222; outline-offset: 1px; }
+
+
+.intro { padding: 18px 0 6px; }
+.intro h1 { margin: 0; font-size: 24px; font-weight: 600; }
+.intro p { margin: 2px 0 0; color: #666; font-size: 14px; }
+.filters { display: flex; gap: 6px; flex-wrap: wrap; padding: 10px 0 14px; }
+.filters button { border: 1px solid #bbb; background: #fff; border-radius: 99px; padding: 4px 12px; font-size: 13px; cursor: pointer; }
+.filters button[aria-pressed="true"] { border-color: #222; background: #222; color: #fff; }
+.grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; padding-bottom: 120px; }
+@media (max-width: 700px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } }
+.card { border: 1px solid #ccc; display: grid; min-width: 0; }
+.card .img { position: relative; aspect-ratio: 4 / 5; border: 0; border-bottom: 1px dashed #999; font-size: 11px; padding: 6px; }
+.card .img .b { display: block; }
+.card .img .h { display: none; }
+.card:hover .img .b { display: none; }
+.card:hover .img .h { display: block; }
+.card .new { position: absolute; top: 6px; right: 6px; font-size: 10px; border: 1px solid #888; background: #fff; padding: 0 6px; border-radius: 99px; text-transform: none; letter-spacing: 0; color: #444; }
+.card .nm { font-size: 13px; font-weight: 600; padding: 7px 8px 0; }
+.card .ctl { display: flex; justify-content: space-between; align-items: center; gap: 4px; padding: 7px 8px 9px; }
+.card .ctl button { border: 1px solid #999; background: #fff; min-width: 34px; height: 32px; cursor: pointer; }
+.card .ctl button.add { flex: 1; background: #222; color: #fff; border-color: #222; font-weight: 600; }
+.card .ctl button:disabled { opacity: .35; cursor: not-allowed; }
+
+
+.bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; background: #f2f2f2; border-top: 2px solid #222; }
+.bar .wrap { display: flex; justify-content: space-between; align-items: center; gap: 12px; height: 64px; }
+.bar .tot { font-size: 14px; }
+.bar .tot b { font-size: 16px; }
+.btn { background: #222; color: #fff; border: 0; padding: 12px 22px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; font-size: 14px; }
+.btn:disabled { background: #999; cursor: not-allowed; }
+.btn.ghost { background: #fff; color: #222; border: 1px solid #222; }
+
+
+.plan { max-width: 620px; margin: 0 auto; padding: 18px 20px 120px; display: grid; gap: 14px; }
+.plan h1 { text-align: center; font-size: 24px; margin: 0; font-weight: 600; }
+.opt { position: relative; border: 1px solid #bbb; padding: 14px; cursor: pointer; background: #fff; display: grid; gap: 12px; }
+.opt[aria-checked="true"] { border: 2px solid #222; padding: 13px; }
+.opt .label { position: absolute; top: -10px; right: 14px; background: #fff; border: 1px solid #222; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 2px 8px; }
+.orow { display: grid; grid-template-columns: 22px 44px 1fr auto; gap: 12px; align-items: center; }
+.radio { width: 18px; height: 18px; border: 1.5px solid #666; border-radius: 50%; display: grid; place-items: center; }
+.opt[aria-checked="true"] .radio::after { content: ""; width: 9px; height: 9px; border-radius: 50%; background: #222; }
+.thumb { width: 44px; height: 44px; font-size: 9px; }
+.ttl { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.ttl b { font-size: 17px; }
+.tag { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; border: 1px solid #888; padding: 1px 6px; color: #444; }
+.sub { font-size: 13px; color: #666; }
+.price { text-align: right; white-space: nowrap; display: grid; gap: 3px; justify-items: end; }
+.price b { font-size: 20px; }
+.price s { color: #777; font-size: 14px; }
+.chip { font-size: 12px; font-weight: 700; border: 1px solid #222; padding: 1px 7px; }
+.inner { display: none; border-top: 1px dashed #bbb; padding-top: 12px; gap: 10px; }
+.opt[aria-checked="true"] .inner { display: grid; }
+.inner select { font: inherit; padding: 8px; border: 1px solid #999; background: #fff; width: 100%; }
+.checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 14px; }
+.checks li::before { content: "✓  "; font-weight: 700; }
+.navrow { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; }
+
+
+.co { max-width: 620px; margin: 0 auto; padding: 18px 20px 60px; display: grid; gap: 12px; }
+.co .box { height: 260px; font-size: 13px; }
+.co p { margin: 0; font-size: 14px; }
+@media (max-width: 700px) { .slot span { font-size: 9px; white-space: normal; line-height: 1.15; } }
+@media (max-width: 700px) {
+  .filters { flex-wrap: nowrap; overflow-x: auto; }
+  .filters button { flex: none; }
+  .orow { grid-template-columns: 22px 44px minmax(0, 1fr); }
+  .orow .price { grid-column: 1 / -1; justify-items: start; grid-auto-flow: column; justify-content: start; align-items: center; gap: 8px; white-space: normal; }
+  .price b { font-size: 18px; }
+}
+[hidden] { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="banner"><b>WIREFRAME</b> · shows how the subscription works, not how it will look · not final design</div>
+
+<header class="hdr">
+  <div class="wrap">
+    <div class="box logo">Logo</div>
+    <div class="navs"><span></span><span></span><span></span></div>
+    <span class="cart" id="cart">Cart (0)</span>
+  </div>
+</header>
+
+<div class="steps" id="steps">
+  <span data-s="1"><i>1</i>Pick your sets</span>
+  <span data-s="2"><i>2</i>Pick your plan</span>
+  <span data-s="3"><i>3</i>Checkout</span>
+</div>
+
+<section id="s1">
+  <div class="picker" id="picker">
+    <div class="wrap">
+      <div class="tabs" id="tabs" role="radiogroup" aria-label="Sets per delivery"></div>
+      <div class="pline" id="pline"></div>
+      <div class="mid">
+        <div class="freqs" id="freqs" role="radiogroup" aria-label="Delivered every"></div>
+      </div>
+      <div class="slots" id="slots"></div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="intro">
+      <h1>Pick your designs</h1>
+    </div>
+    <div class="filters" id="filters"></div>
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <div class="bar">
+    <div class="wrap">
+      <div class="tot" id="tot"></div>
+      <button class="btn" type="button" id="next">Next</button>
+    </div>
+  </div>
+</section>
+
+<section id="s2" hidden>
+  <div class="plan">
+    <h1>Pick your plan</h1>
+    <div role="radiogroup" aria-label="Plan" style="display:grid;gap:14px">
+      <div class="opt" role="radio" tabindex="0" id="optSub" aria-checked="true">
+        <span class="label">Recommended</span>
+        <div class="orow">
+          <span class="radio"></span>
+          <div class="box thumb">img</div>
+          <div>
+            <div class="ttl"><b id="subN">7 Sets</b><span class="tag">Subscribe &amp; save</span></div>
+            <div class="sub" id="subF">Delivered every 6 weeks</div>
+          </div>
+          <div class="price"><b id="subP">Start now $60</b><s id="subS">$84</s><span class="chip" id="subOff">Save 28%</span><span class="chip">Free shipping every order</span></div>
+        </div>
+        <div class="inner">
+          <select id="subSel" aria-label="Delivery frequency"></select>
+          <ul class="checks">
+            <li>Change sets anytime before each delivery</li>
+          </ul>
+        </div>
+      </div>
+      <div class="opt" role="radio" tabindex="0" id="optOnce" aria-checked="false">
+        <div class="orow">
+          <span class="radio"></span>
+          <div class="box thumb">img</div>
+          <div>
+            <div class="ttl"><b id="onceN">7 Sets</b><span>Buy one time</span></div>
+          </div>
+          <div class="price"><b id="onceP">Buy once $84</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bar">
+    <div class="wrap navrow" style="display:grid">
+      <button class="btn ghost" type="button" id="back">Back</button>
+      <button class="btn" type="button" id="go">Add subscription · $60</button>
+    </div>
+  </div>
+</section>
+
+<section id="s3" hidden>
+  <div class="co">
+    <div class="box">Shopify checkout (payment)</div>
+    <button class="btn ghost" type="button" id="back2">Back</button>
+  </div>
+</section>
+
+
+<script>
+const ONE_SET = 12;
+const TIERS = [
+  { n: 7,  price: 60 },
+  { n: 10, price: 80 },
+  { n: 5,  price: 40 },
+];
+const FREQS = [4, 6, 8];
+const REC_FREQ = { 5: 4, 7: 6, 10: 8 };
+const COLOURS = ["Red", "Nude", "Pink", "Brown", "Purple", "Green", "Glitter"];
+const DESIGNS = Array.from({ length: 16 }, (_, i) => ({ id: "d" + (i + 1), name: "Design " + (i + 1), colour: COLOURS[i % COLOURS.length], isNew: i < 4 }));
+const byId = Object.fromEntries(DESIGNS.map(d => [d.id, d]));
+
+const S = { step: 1, n: 7, freq: 6, picks: [], plan: "sub", filter: "All" };
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const tier = () => TIERS.find(t => t.n === S.n);
+const once = () => ONE_SET * S.n;
+const save = () => once() - tier().price;
+const pct = () => Math.floor(save() / once() * 100);
+const usd = v => Number.isInteger(v) ? "$" + v : "$" + v.toFixed(2);
+const qty = id => S.picks.filter(p => p === id).length;
+const left = () => S.n - S.picks.length;
+
+function renderPicker() {
+  $("#tabs").innerHTML = TIERS.map(t => `<button type="button" role="radio" aria-checked="${t.n === S.n}" data-n="${t.n}">${t.n} sets</button>`).join("");
+  $$("#tabs button").forEach(b => b.onclick = () => {
+    S.n = +b.dataset.n;
+    S.freq = REC_FREQ[S.n];
+    if (S.picks.length > S.n) S.picks = S.picks.slice(0, S.n);
+    render();
+  });
+  $("#pline").innerHTML = `<b>${usd(tier().price)}</b> <span class="save">(Save ${usd(save())})</span>`;
+  $("#freqs").innerHTML = `<span class="lbl">Delivered every</span>` + FREQS.map(f => `<button type="button" role="radio" aria-checked="${f === S.freq}" data-f="${f}">${f} weeks</button>`).join("");
+  $$("#freqs button").forEach(b => b.onclick = () => { S.freq = +b.dataset.f; render(); });
+
+  const slots = $("#slots");
+  slots.hidden = S.picks.length === 0;
+  slots.style.setProperty("--n", S.n);
+  slots.style.setProperty("--cols", S.n <= 7 ? S.n : 5);
+  slots.innerHTML = Array.from({ length: S.n }, (_, i) => {
+    const id = S.picks[i];
+    return id
+      ? `<div class="slot full" data-i="${i}"><div class="sq" title="Tap to remove">img<button type="button" class="rm" data-rm="${i}" aria-label="Remove ${byId[id].name}">×</button></div><span>${byId[id].name}</span></div>`
+      : `<div class="slot"><div class="sq"></div><span>Colour ${i + 1}</span></div>`;
+  }).join("");
+  $$("[data-rm]").forEach(b => b.onclick = e => { e.stopPropagation(); S.picks.splice(+b.dataset.rm, 1); render(); });
+  $$(".slot.full .sq").forEach(sq => sq.onclick = () => { S.picks.splice(+sq.parentElement.dataset.i, 1); render(); });
+}
+
+function renderGrid() {
+  $("#filters").innerHTML = ["All"].concat(COLOURS).map(c => `<button type="button" aria-pressed="${c === S.filter}" data-c="${c}">${c} (${c === "All" ? DESIGNS.length : DESIGNS.filter(d => d.colour === c).length})</button>`).join("");
+  $$("#filters button").forEach(b => b.onclick = () => { S.filter = b.dataset.c; renderGrid(); });
+  const full = left() === 0;
+  $("#grid").innerHTML = DESIGNS.filter(d => S.filter === "All" || d.colour === S.filter).map(d => {
+    const q = qty(d.id);
+    const ctl = q
+      ? `<button type="button" data-m="${d.id}" aria-label="Remove one">−</button><b>${q}</b><button type="button" data-p="${d.id}" ${full ? "disabled" : ""} aria-label="Add one">+</button>`
+      : `<button type="button" class="add" data-p="${d.id}" ${full ? "disabled" : ""}>Add</button>`;
+    return `<div class="card">
+      <div class="box img">${d.isNew ? `<span class="new">New</span>` : ""}<span class="b">Product image</span><span class="h">On-hand photo<br>(shows on hover)</span></div>
+      <div class="nm">${d.name}</div>
+      <div class="ctl">${ctl}</div>
+    </div>`;
+  }).join("");
+  $$("[data-p]").forEach(b => b.onclick = () => {
+    if (!left()) return;
+    S.picks.push(b.dataset.p);
+    const i = S.picks.length - 1;
+    render();
+    const el = $(`.slot[data-i="${i}"]`); if (el) { el.classList.add("pop"); setTimeout(() => el.classList.remove("pop"), 500); }
+  });
+  $$("[data-m]").forEach(b => b.onclick = () => { const i = S.picks.lastIndexOf(b.dataset.m); if (i > -1) S.picks.splice(i, 1); render(); });
+}
+
+function renderBar() {
+  const l = left();
+  $("#tot").innerHTML = `Total: <b>${usd(tier().price)}</b> (${usd(save())} saved)`;
+  $("#next").disabled = l > 0;
+  $("#next").textContent = l > 0 ? `Add ${l} more set${l === 1 ? "" : "s"} to continue` : "Next";
+}
+
+function renderPlan() {
+  $("#subN").textContent = `${S.n} Sets`;
+  $("#subF").textContent = `Delivered every ${S.freq} weeks`;
+  $("#subP").textContent = `Start now ${usd(tier().price)}`;
+  $("#subS").textContent = usd(once());
+  $("#subOff").textContent = `Save ${pct()}%`;
+  $("#subSel").innerHTML = FREQS.map(f => `<option value="${f}" ${f === S.freq ? "selected" : ""}>Delivery every ${f} weeks</option>`).join("");
+  $("#onceN").textContent = `${S.n} Sets`;
+  $("#onceP").textContent = `Buy once ${usd(once())}`;
+  $("#optSub").setAttribute("aria-checked", S.plan === "sub");
+  $("#optOnce").setAttribute("aria-checked", S.plan === "once");
+  $("#go").textContent = S.plan === "sub" ? `Add subscription · ${usd(tier().price)}` : `Buy once · ${usd(once())}`;
+}
+
+function renderSteps() {
+  ["#s1", "#s2", "#s3"].forEach((s, i) => $(s).hidden = S.step !== i + 1);
+  $$("#steps span").forEach(sp => { const k = +sp.dataset.s; sp.className = k === S.step ? "on" : k < S.step ? "done" : ""; });
+}
+
+function render() {
+  renderSteps();
+  if (S.step === 1) { renderPicker(); renderGrid(); renderBar(); }
+  if (S.step === 2) renderPlan();
+}
+function go(step) { S.step = step; render(); window.scrollTo(0, 0); }
+
+$("#next").onclick = () => { if (!left()) go(2); };
+$("#back").onclick = () => go(1);
+$("#back2").onclick = () => go(2);
+$("#go").onclick = () => { $("#cart").textContent = "Cart (1)"; go(3); };
+const pick = p => () => { S.plan = p; renderPlan(); };
+$("#optSub").onclick = e => { if (e.target.tagName !== "SELECT") pick("sub")(); };
+$("#optOnce").onclick = pick("once");
+["#optSub", "#optOnce"].forEach(s => $(s).onkeydown = e => { if ((e.key === "Enter" || e.key === " ") && e.target === $(s)) { e.preventDefault(); $(s).click(); } });
+$("#subSel").onchange = e => { S.freq = +e.target.value; renderPlan(); };
+
+
+render();
+</script>
+</body>
+</html>

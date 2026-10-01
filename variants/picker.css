@@ -42,6 +42,10 @@ button:focus-visible, select:focus-visible { outline: 2px solid #222; outline-of
 .save { font-weight: 700; color: #166534; white-space: nowrap; }
 [data-variant="c"] .price b { font-size: 24px; }
 [data-variant="c"] .price span { font-size: 17px; }
+/* F: the price on a green tint; #14532d saving on #dcfce7 is 8.3:1, #222 price 14.5:1 */
+[data-variant="f"] .price { background: #dcfce7; border-radius: 8px; padding: 6px 12px; }
+[data-variant="f"] .price b { font-size: 22px; }
+[data-variant="f"] .price span { color: #14532d; }
 
 /* delivery */
 .freqs { display: flex; gap: 6px; align-items: center; justify-content: center; }

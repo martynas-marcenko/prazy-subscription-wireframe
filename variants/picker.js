@@ -64,6 +64,11 @@ const LAYOUTS = {
     <div class="row center">${price()}</div>
     <div class="row center">${freqSelect()}</div>
     ${S.picks.length ? tray() : ""}`,
+  /* F. C's original row kept (price left, weeks dropdown right), the price set on a green tint so it
+     is not missed (the other answer to Leon's 2026-10-01 note, without making the picker taller) */
+  f: () => `${seg()}
+    <div class="row">${price()}${freqSelect()}</div>
+    ${S.picks.length ? tray() : ""}`,
   /* D. Summary: one line while browsing (the plan left; the box's slots running under "Edit" with
      the pick count right);
      "Edit" opens the settings (sets, weeks, picks) in a sheet */

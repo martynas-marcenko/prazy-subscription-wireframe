@@ -28,6 +28,7 @@ const thumbs = () => `<div class="thumbs" style="--cols:${S.n <= 7 ? S.n : 5}">$
 }).join("")}</div>`;
 const strip = (wide = false) => `<div class="strip${wide ? " wide" : ""}" style="--n:${S.n}" aria-label="${S.picks.length} of ${S.n} picked">${Array.from({ length: S.n }, (_, i) => `<i class="${S.picks[i] ? "full" : ""}"></i>`).join("")}</div>`;
 const picked = () => `<div class="picked">${S.picks.length} of ${S.n} picked</div>`;
+const editBtn = () => `<button class="edit" type="button" aria-haspopup="dialog" aria-label="Edit your box, ${S.picks.length} designs picked">Edit<span class="count">${S.picks.length}</span></button>`;
 const slots = () => `<div class="slots" aria-hidden="true">${Array.from({ length: S.n }, (_, i) => `<i class="${S.picks[i] ? "full" : ""}"></i>`).join("")}</div>`;
 
 const LAYOUTS = {
@@ -44,7 +45,9 @@ const LAYOUTS = {
     <div class="row">${price()}${freqSelect()}</div>
     ${S.picks.length ? `<div class="row">${strip(true)}</div>` : ""}`,
     d: () => `<div class="row sumrow"><div class="sum"><b>${S.n} sets, every ${S.freq} weeks</b>${price()}</div>
-    <div class="sum-act">${slots()}<button class="edit" type="button" aria-haspopup="dialog" aria-label="Edit your box, ${S.picks.length} designs picked">Edit<span class="count">${S.picks.length}</span></button></div></div>`,
+    <div class="sum-act">${slots()}${editBtn()}</div></div>`,
+    e: () => `<div class="row sumrow"><div class="sum-act">${slots()}</div>
+    <div class="sum sum-edit"><div><b>${S.n} sets, every ${S.freq} weeks</b>${price()}</div>${editBtn()}</div></div>`,
 };
 
 const sheetBody = () => `<div class="sh-hd"><h2>Your box</h2><button class="sh-x" type="button" aria-label="Close">×</button></div>
@@ -70,7 +73,7 @@ function sheet() {
   return d;
 }
 function renderSheet() {
-  if (VARIANT !== "d" || !S.open) return;
+  if ((VARIANT !== "d" && VARIANT !== "e") || !S.open) return;
   const d = sheet();
   d.innerHTML = sheetBody();
   bind(d);
@@ -91,16 +94,17 @@ function bind(root) {
   });
   root.querySelectorAll("[data-f]").forEach(b => b.onclick = () => { S.freq = +b.dataset.f; render(); });
   const sel = root.querySelector(".freq-sel"); if (sel) sel.onchange = e => { S.freq = +e.target.value; render(); };
-  root.querySelectorAll("[data-rm]").forEach(b => b.onclick = () => { S.picks.splice(+b.dataset.rm, 1); if (!S.picks.length && VARIANT !== "d") S.open = false; render(); });
+  root.querySelectorAll("[data-rm]").forEach(b => b.onclick = () => { S.picks.splice(+b.dataset.rm, 1); if (!S.picks.length && VARIANT !== "d" && VARIANT !== "e") S.open = false; render(); });
 }
 
 function cutSlots() {
-  const row = $("#picker .slots"), btn = $("#picker .edit"), sum = $("#picker .sumrow .sum");
-  if (!row || !btn || !sum || !row.firstElementChild) return;
+  const row = $("#picker .slots"), sum = $("#picker .sumrow .sum");
+  if (!row || !sum || !row.firstElementChild) return;
+  const btn = $("#picker .sum-act .edit"); // D: the cut is at the button; E: at the slots' right edge, by the frame
   sum.style.minWidth = "";
   const w = row.firstElementChild.getBoundingClientRect().width;
   const pitch = w + parseFloat(getComputedStyle(row).columnGap || "6");
-  const visible = btn.getBoundingClientRect().left - row.firstElementChild.getBoundingClientRect().left;
+  const visible = (btn ? btn.getBoundingClientRect().left : row.getBoundingClientRect().right) - row.firstElementChild.getBoundingClientRect().left;
   const k = Math.max(0, Math.floor((visible - 0.35 * w) / pitch)); // whole slots before the cut one
   const slack = visible - k * pitch - 0.65 * w; // width past a 65% cut: the frame takes it
   if (slack > 0) sum.style.minWidth = `${sum.getBoundingClientRect().width + slack}px`;

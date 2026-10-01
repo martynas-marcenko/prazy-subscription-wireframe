@@ -69,7 +69,10 @@ button:focus-visible, select:focus-visible { outline: 2px solid #222; outline-of
 .slots { flex: 1; min-width: 0; display: flex; gap: 6px; overflow: hidden; }
 .slots i { flex: none; height: 100%; aspect-ratio: 1; border: 1.5px dashed #999; border-radius: 8px; background: #fafafa; }
 .slots i.full { border: 1px solid #222; background: #d6d6d6; }
-.sumrow .edit { height: auto; margin-left: -22px; z-index: 1; box-shadow: 0 0 0 4px #fff; } .edit { position: relative; flex: none; height: 44px; border: 0; border-radius: 8px; background: #222; color: #fff; padding: 0 18px; font-weight: 700; cursor: pointer; }
+.sumrow .edit { height: auto; margin-left: -22px; z-index: 1; box-shadow: 0 0 0 4px #fff; } .sum.sum-edit { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 3px 3px 3px 12px; }
+.sum-edit .edit { height: 40px; padding: 0 14px; }
+.sumrow .sum-edit .edit { margin-left: 0; box-shadow: none; }
+.edit { position: relative; flex: none; height: 44px; border: 0; border-radius: 8px; background: #222; color: #fff; padding: 0 18px; font-weight: 700; cursor: pointer; }
 .edit .count { position: absolute; top: -8px; right: -6px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 99px; background: #ccc; color: #222; font-size: 12px; font-weight: 700; display: grid; place-items: center; }
 .sheet { border: 0; padding: 0; width: 100%; max-width: 560px; margin: auto auto 0; border-radius: 14px 14px 0 0; color: #222; }
 .sheet::backdrop { background: rgba(0,0,0,.45); }
